@@ -9,9 +9,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class GitHistory {
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -21,17 +19,17 @@ public class GitHistory {
 
 	private Date begin;
 	private Date end;
-	private String bugid;
-	private String[] bugidArr;
+	private String keyword;
+	private String[] keywords;
 
-	private List<String> commitFiles;	//依据条件查询到的提交文件记录
+	private Set<String> commitFiles;	//依据条件查询到的提交文件记录
 	private List<String> warnings;		//警告信息
 	private List<String> infos;				//提交信息
 
 	public static void main(String[] args) throws Exception {
 		GitHistory gitHistory = new GitHistory();
 		gitHistory.init();
-		gitHistory.setBugid("需查询的关键字");
+		gitHistory.setKeyword("需查询的关键字");
 		gitHistory.searchLog();
 		System.out.println("-----------------commit info--------------------------");
 		for(String info : gitHistory.getInfos()){
@@ -52,13 +50,13 @@ public class GitHistory {
 		repository = git.getRepository();
 		this.infos = new ArrayList<>();
 		this.warnings = new ArrayList<>();
-		this.commitFiles = new ArrayList<>();
+		this.commitFiles = new HashSet<>();
 	}
 
 	private boolean need(String msg, Date commitDate) {
 		boolean result = false;
-		if(bugidArr != null){
-			for (String str : bugidArr){
+		if(keywords != null){
+			for (String str : keywords){
 				result = StringUtils.isNotBlank(str) && msg.indexOf(str) > -1;
 				if(result){
 					break;
@@ -126,13 +124,13 @@ public class GitHistory {
 		return files;
 	}
 
-	public void setBugid(String bugid)
+	public void setKeyword(String keyword)
 	{
-		if(StringUtils.isBlank(bugid)){
+		if(StringUtils.isBlank(keyword)){
 			return;
 		}
-		this.bugid = bugid;
-		bugidArr = StringUtils.split(",");//多个查询关键字使用,分割
+		this.keyword = keyword;
+		keywords = StringUtils.split(",");//多个查询关键字使用,分割
 	}
 
 	public void setBegin(Date begin) {
@@ -147,7 +145,7 @@ public class GitHistory {
 		this.dirPath = dirPath;
 	}
 
-	public List<String> getCommitFiles() {
+	public Set<String> getCommitFiles() {
 		return commitFiles;
 	}
 

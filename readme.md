@@ -1,6 +1,9 @@
-# 使用JGit提取GIT提交文件列表
+# java访问版本控制工具git,svn获取提交历史记录
+使用JGit提取GIT提交文件列表:GitHistory
 
-##关键代码
+使用SVNKit提取SVN提交文件列表:SVNHistory
+
+##GitHistory关键代码
 ```java
 		if (commitID != null && !commitID.isEmpty()) {
 
