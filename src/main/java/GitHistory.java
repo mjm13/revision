@@ -130,7 +130,7 @@ public class GitHistory {
 			return;
 		}
 		this.keyword = keyword;
-		keywords = StringUtils.split(",");//多个查询关键字使用,分割
+		keywords = StringUtils.split(keyword,",");//多个查询关键字使用,分割
 	}
 
 	public void setBegin(Date begin) {
